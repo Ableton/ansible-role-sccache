@@ -1,0 +1,6 @@
+---
+sccache_config_directory: "C:\\Users\\{{ sccache_user }}\\AppData\\Roaming\\\
+  Mozilla\\sccache\\config"
+sccache_config_file: "C:\\Users\\{{ sccache_user }}\\AppData\\Roaming\\\
+  Mozilla\\sccache\\config\\config"
+target_triplet: "x86_64-pc-windows-msvc"

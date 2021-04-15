@@ -1,0 +1,5 @@
+---
+- name: Install sccache package from homebrew
+  homebrew:
+    name: sccache
+    state: present

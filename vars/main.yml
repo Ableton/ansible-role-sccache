@@ -1,0 +1,9 @@
+---
+# Scratch directory to use when downloading binaries on Unix
+sccache_binary_download_dir: "/tmp"
+
+# Where to install sccache when installing binaries on Unix
+sccache_install_prefix_unix: "/usr/local"
+
+# Where to install sccache when installing binaries on Windows
+sccache_install_prefix_windows: "C:\\Windows"

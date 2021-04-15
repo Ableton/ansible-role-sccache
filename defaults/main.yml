@@ -1,0 +1,39 @@
+---
+##################################
+# Installation-related variables #
+##################################
+
+# Dictionary of dictionaries describing key/value options to write to the sccache
+# configuration file. sccache is configured with a TOML format, which requires a section
+# for key/value pairs. At the time of writing, documentation of the format is slim,
+# and most configuration options must be read from the parsing code itself:
+# https://github.com/mozilla/sccache/blob/master/src/config.rs.
+# Note that all values should be quoted so that Ansible treats them as strings. With
+# boolean values, this is especially problematic because Python will serialize `true` as
+# "True", and sccache values are case-sensitive and may exit with an error when parsing
+# that option.
+#
+# For example, to set a Redis cache, sccache_config_options could be set as follows:
+#   sccache_config_options:
+#      cache:
+#        redis.url: "redis://your-redis-server-here"
+sccache_config_options: {}
+
+# Where to download prebuilt sccache binaries from
+sccache_download_url: "https://github.com/mozilla/sccache/releases/download"
+
+# When true, install sccache from a prebuilt binary instead of installing from a package
+# manager.
+sccache_install_from_binary: false
+
+# User to configure sccache for
+sccache_user: "{{ ansible_user }}"
+
+# Version and SHA256 checksums of sccache to install. Only applies when installing from
+# GitHub.
+sccache_version:
+  version: "0.2.15"
+  shas:
+    Darwin: 908e939ea3513b52af03878753a58e7c09898991905b1ae3c137bb8f10fa1be2
+    Debian: e5d03a9aa3b9fac7e490391bbe22d4f42c840d31ef9eaf127a03101930cbb7ca
+    Windows: 3dfecdbb85561c55e899d3ad039c671f806d283c49da0721c2ef5c1310d87965

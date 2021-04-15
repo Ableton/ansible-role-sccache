@@ -1,0 +1,6 @@
+---
+sccache_config_directory: "~{{ sccache_user }}/Library/Application Support/\
+  Mozilla.sccache"
+sccache_config_file: "~{{ sccache_user }}/Library/Application Support/\
+  Mozilla.sccache/config"
+target_triplet: "x86_64-apple-darwin"

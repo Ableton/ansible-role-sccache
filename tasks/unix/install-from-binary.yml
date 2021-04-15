@@ -1,0 +1,74 @@
+---
+- name: Check sccache version
+  command: "sccache --version"
+  changed_when: false
+  failed_when: false
+  register: sccache_version_cmd
+
+- name: Initialize should_install_from_binary fact
+  set_fact:
+    should_install_from_binary: false
+
+- name: Set fact to determine if sccache installation is necessary
+  set_fact:
+    should_install_from_binary: true
+  when: >
+    sccache_version_cmd.rc != 0 or
+    sccache_version.version not in sccache_version_cmd.stdout_lines[0]
+
+- name: Install sccache from GitHub
+  block:
+    - name: Ensure sccache download and extraction directories exist
+      become: true
+      file:
+        path: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}"
+        state: directory
+        owner: "{{ sccache_user }}"
+        mode: "0755"
+
+    - name: Fetch sccache binary
+      get_url:
+        url: "{{ sccache_download_url }}/v{{ sccache_version.version }}\
+          /sccache-v{{ sccache_version.version }}-{{ target_triplet }}.tar.gz"
+        checksum: "sha256:{{ sccache_version.shas[ansible_os_family] }}"
+        dest: "{{ sccache_binary_download_dir }}"
+
+    - name: Uncompress sccache tarball
+      unarchive:
+        src: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}-\
+          {{ target_triplet }}.tar.gz"
+        dest: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}"
+        mode: "0755"
+        remote_src: true
+      environment:
+        # unarchive requires GNU tar be installed on macOS, so the Homebrew and MacPorts
+        # install paths must be added to PATH in order to find it.
+        PATH: "/usr/local/bin:/opt/local/bin:{{ ansible_env.PATH }}"
+
+    - name: Ensure installation directory exists
+      become: true
+      file:
+        path: "{{ sccache_install_prefix_unix }}/bin"
+        state: directory
+        mode: "0755"
+
+    - name: Install sccache
+      become: true
+      copy:
+        src: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}/\
+          sccache-v{{ sccache_version.version }}-{{ target_triplet }}/sccache"
+        dest: "{{ sccache_install_prefix_unix }}/bin/sccache"
+        mode: a+rx
+        remote_src: true
+
+    - name: Cleanup download directory
+      file:
+        path: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}"
+        state: absent
+
+    - name: Cleanup source tarball
+      file:
+        path: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}-\
+          {{ target_triplet }}.tar.gz"
+        state: absent
+  when: should_install_from_binary

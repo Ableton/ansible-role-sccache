@@ -1,0 +1,48 @@
+---
+- name: Ensure sccache configuration directory exists
+  become: true
+  file:
+    path: "{{ sccache_config_directory }}"
+    state: directory
+    owner: "{{ sccache_user }}"
+    mode: "0755"
+
+- name: Create sccache configuration file
+  become: true
+  template:
+    src: config.j2
+    dest: "{{ sccache_config_file }}"
+    owner: "{{ sccache_user }}"
+    mode: "0644"
+  register: sccache_config
+
+- name: Verify sccache configuration
+  block:
+    # Homebrew uses /usr/local/bin to install binaries, which is not part of the default
+    # path on macOS. Additionally, the sccache_install_prefix_unix binary path may not be
+    # part of the default PATH, so both are are added here.
+    - name: Set fact combining PATH with install prefix and Homebrew path
+      set_fact:
+        full_path: "/usr/local/bin:\
+          {{ sccache_install_prefix_unix }}/bin:{{ ansible_env.PATH }}"
+
+    # sccache won't load the new values if a server is already running in the background,
+    # so we stop any running server before checking the new configuration.
+    - name: Shut down running server if present
+      command: "sccache --stop-server"
+      environment:
+        PATH: "{{ full_path }}"
+      register: stop_server_result
+      failed_when:
+        - stop_server_result.rc != 0
+        # This error occasionally occurs when --stop-server is called on a running server.
+        # I'm not sure why sccache doesn't exit gracefully here.
+        - '"Failed to send data" not in stop_server_result.stderr'
+        # This error occurs if no server was running to begin with.
+        - '"couldn''t connect to server" not in stop_server_result.stderr'
+
+    - name: Test configuration by getting stats
+      command: "sccache --show-stats"
+      environment:
+        PATH: "{{ full_path }}"
+  when: sccache_config is changed

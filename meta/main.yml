@@ -1,0 +1,27 @@
+---
+galaxy_info:
+  author: ableton
+  company: Ableton AG
+  description: Installs sccache compiler cache
+  license: MIT
+  min_ansible_version: 2.10
+  role_name: sccache
+
+  galaxy_tags:
+    - sccache
+
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: MacOSX
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Windows
+      versions:
+        - all
+
+dependencies: []

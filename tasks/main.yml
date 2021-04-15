@@ -1,0 +1,48 @@
+---
+- name: Include OS-specific vars
+  include_vars: "{{ ansible_os_family | lower }}.yml"
+
+# The sccache package doesn't exist for Ubuntu <= 18.04
+- name: Force sccache to be installed from a binary release on older Ubuntu systems
+  set_fact:
+    sccache_install_from_binary: true
+  when: >
+    ansible_distribution == 'Ubuntu' and ansible_distribution_major_version | int <= 18
+
+# Homebrew must compile from source on older versions of macOS, and that takes an
+# untenably long time when building sccache.
+- name: Force sccache to be installed from a binary release on older macOS systems \
+    using Homebrew
+  set_fact:
+    sccache_install_from_binary: true
+  when: >
+    ansible_distribution_version is version_compare('10.14', '<') and
+    ansible_pkg_mgr == "homebrew"
+
+# The sccache package doesn't currently exist on MacPorts
+- name: Force sccache to be installed from a binary release when using MacPorts
+  set_fact:
+    sccache_install_from_binary: true
+  when: ansible_pkg_mgr == "macports"
+
+- name: Install sccache on Unix
+  block:
+    - include_tasks: "unix/install-from-binary.yml"
+      when: sccache_install_from_binary
+
+    - include_tasks: "install-package-{{ ansible_pkg_mgr }}.yml"
+      when: not sccache_install_from_binary
+
+    - include_tasks: "unix/configure.yml"
+  when: ansible_os_family != "Windows"
+
+- name: Install sccache on Windows
+  block:
+    - include_tasks: "windows/install-from-binary.yml"
+      when: sccache_install_from_binary
+
+    - include_tasks: "install-package-{{ ansible_pkg_mgr }}.yml"
+      when: not sccache_install_from_binary
+
+    - include_tasks: "windows/configure.yml"
+  when: ansible_os_family == "Windows"

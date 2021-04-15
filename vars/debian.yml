@@ -1,0 +1,4 @@
+---
+sccache_config_directory: "~{{ sccache_user }}/.config/sccache"
+sccache_config_file: "~{{ sccache_user }}/.config/sccache/config"
+target_triplet: "x86_64-unknown-linux-musl"

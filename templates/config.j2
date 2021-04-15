@@ -1,0 +1,10 @@
+{% for section, config in sccache_config_options.items() %}
+[{{ section }}]
+{% for key, value in config.items() %}
+{#
+   Jinja currently doesn't have a native TOML filter, but TOML and JSON have the same
+   string representation.
+#}
+{{ key }} = {{ value | to_json }}
+{% endfor %}
+{% endfor %}

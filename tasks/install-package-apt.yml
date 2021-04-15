@@ -1,0 +1,6 @@
+---
+- name: Install sccache package from apt
+  become: true
+  apt:
+    name: sccache
+    state: present
