@@ -1,8 +1,4 @@
 ---
-##################################
-# Installation-related variables #
-##################################
-
 # Dictionary of dictionaries describing key/value options to write to the sccache
 # configuration file. sccache is configured with a TOML format, which requires a section
 # for key/value pairs. At the time of writing, documentation of the format is slim,
@@ -29,8 +25,8 @@ sccache_install_from_binary: false
 # User to configure sccache for
 sccache_user: "{{ ansible_user }}"
 
-# Version and SHA256 checksums of sccache to install. Only applies when installing from
-# GitHub.
+# Version and SHA256 checksums of sccache to install. Only applies when
+# sccache_install_from_binary is true.
 sccache_version:
   version: "0.2.15"
   shas:
