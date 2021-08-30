@@ -10,7 +10,6 @@ Requirements
 Ansible >= 2.10 is required. This role supports package-based installation on the
 following OS types:
 
-- Debian Linux (via the `apt` module)
 - macOS (via the `homebrew` module)
 - Windows (via the `win_chocolatey` module)
 
