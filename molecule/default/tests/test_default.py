@@ -1,3 +1,5 @@
+"""Molecule tests for the default scenario."""
+
 import os
 
 import testinfra.utils.ansible_runner
@@ -9,6 +11,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_sccache_installed(host):
+    """Test that sccache was installed."""
     sccache_bin = host.file("/usr/local/bin/sccache")
 
     assert sccache_bin.is_file
