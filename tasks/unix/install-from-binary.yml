@@ -43,7 +43,7 @@
       environment:
         # unarchive requires GNU tar be installed on macOS, so the Homebrew and MacPorts
         # install paths must be added to PATH in order to find it.
-        PATH: "/usr/local/bin:/opt/local/bin:{{ ansible_env.PATH }}"
+        PATH: "{{ ansible_pkg_mgr_path }}"
 
     - name: Ensure installation directory exists
       become: true
