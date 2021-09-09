@@ -18,13 +18,9 @@
 
 - name: Verify sccache configuration
   block:
-    # Homebrew uses /usr/local/bin to install binaries, which is not part of the default
-    # path on macOS. Additionally, the sccache_install_prefix_unix binary path may not be
-    # part of the default PATH, so both are are added here.
-    - name: Set fact combining PATH with install prefix and Homebrew path
+    - name: Set fact combining install prefix and package manager paths
       set_fact:
-        full_path: "/usr/local/bin:\
-          {{ sccache_install_prefix_unix }}/bin:{{ ansible_env.PATH }}"
+        full_path: "{{ sccache_install_prefix_unix }}/bin:{{ ansible_pkg_mgr_path }}"
 
     # sccache won't load the new values if a server is already running in the background,
     # so we stop any running server before checking the new configuration.
