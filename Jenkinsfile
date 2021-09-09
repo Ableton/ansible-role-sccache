@@ -7,9 +7,7 @@ devToolsProject.run(
   setup: { data ->
     Object venv = virtualenv.create('python3.8')
     venv.run('pip install -r requirements-dev.txt')
-    sshagent(['build-ssh-key']) {
-      venv.run('ansible-galaxy install -f -r requirements.yml')
-    }
+    venv.run('ansible-galaxy install -f -r requirements.yml')
     data['venv'] = venv
   },
   test: { data ->
