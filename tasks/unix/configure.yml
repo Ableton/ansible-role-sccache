@@ -25,7 +25,7 @@
     # sccache won't load the new values if a server is already running in the background,
     # so we stop any running server before checking the new configuration.
     - name: Shut down running server if present
-      command: "sccache --stop-server"
+      command: "sccache --stop-server"  # noqa no-changed-when
       environment:
         PATH: "{{ full_path }}"
       register: stop_server_result
@@ -41,4 +41,5 @@
       command: "sccache --show-stats"
       environment:
         PATH: "{{ full_path }}"
+      changed_when: false
   when: sccache_config is changed
