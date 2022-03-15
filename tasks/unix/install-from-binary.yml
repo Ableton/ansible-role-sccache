@@ -32,6 +32,7 @@
           /sccache-v{{ sccache_version.version }}-{{ target_triplet }}.tar.gz"
         checksum: "sha256:{{ sccache_version.shas[ansible_os_family] }}"
         dest: "{{ sccache_binary_download_dir }}"
+        mode: "0644"
 
     - name: Uncompress sccache tarball
       unarchive:
