@@ -30,6 +30,6 @@ sccache_user: "{{ ansible_user }}"
 sccache_version:
   version: "0.2.15"
   shas:
-    Darwin: 908e939ea3513b52af03878753a58e7c09898991905b1ae3c137bb8f10fa1be2
-    Debian: e5d03a9aa3b9fac7e490391bbe22d4f42c840d31ef9eaf127a03101930cbb7ca
-    Windows: 3dfecdbb85561c55e899d3ad039c671f806d283c49da0721c2ef5c1310d87965
+    Darwin: "908e939ea3513b52af03878753a58e7c09898991905b1ae3c137bb8f10fa1be2"
+    Debian: "e5d03a9aa3b9fac7e490391bbe22d4f42c840d31ef9eaf127a03101930cbb7ca"
+    Windows: "3dfecdbb85561c55e899d3ad039c671f806d283c49da0721c2ef5c1310d87965"
