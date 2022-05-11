@@ -10,23 +10,5 @@
     src: config.j2
     dest: "{{ sccache_config_file }}"
     owner: "{{ sccache_user }}"
-  register: sccache_config
-
-- name: Verify sccache configuration
-  block:
-    # sccache won't load the new values if a server is already running in the background,
-    # so we stop any running server before checking the new configuration.
-    - name: Shut down running server if present
-      win_command: "sccache --stop-server"
-      register: stop_server_result
-      failed_when:
-        - stop_server_result.rc != 0
-        # This error occasionally occurs when --stop-server is called on a running server.
-        # I'm not sure why sccache doesn't exit gracefully here.
-        - '"Failed to send data" not in stop_server_result.stderr'
-        # This error occurs if no server was running to begin with.
-        - '"couldn''t connect to server" not in stop_server_result.stderr'
-
-    - name: Test configuration by getting stats
-      win_command: "sccache --show-stats"
-  when: sccache_config is changed
+  notify:
+    - Verify sccache configuration for Windows host
