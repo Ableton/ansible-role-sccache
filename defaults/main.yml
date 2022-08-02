@@ -3,7 +3,7 @@
 # configuration file. sccache is configured with a TOML format, which requires a section
 # for key/value pairs. At the time of writing, documentation of the format is slim,
 # and most configuration options must be read from the parsing code itself:
-# https://github.com/mozilla/sccache/blob/master/src/config.rs.
+# https://github.com/mozilla/sccache/blob/main/src/config.rs.
 # Note that all values should be quoted so that Ansible treats them as strings. With
 # boolean values, this is especially problematic because Python will serialize `true` as
 # "True", and sccache values are case-sensitive and may exit with an error when parsing
