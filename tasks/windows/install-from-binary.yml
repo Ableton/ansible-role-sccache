@@ -35,20 +35,20 @@
     # This is needed to unzip .tar.gz in Windows, see the Ansible documentation for
     # win_unzip.
     - name: Install PSCX
-      win_psmodule:
+      community.windows.win_psmodule:
         allow_clobber: true
         name: Pscx
         state: present
 
     - name: Uncompress sccache tarball
-      win_unzip:
+      community.windows.win_unzip:
         src: "{{ sccache_temp_dir.path }}/sccache.tar.gz"
         dest: "{{ sccache_temp_dir.path }}"
         delete_archive: true
 
     # win_unzip only uncompresses the .gz, but it doesn't unpack the .tar automatically.
     - name: Unpack sccache tarball
-      win_unzip:
+      community.windows.win_unzip:
         src: "{{ sccache_temp_dir.path }}/sccache.tar"
         dest: "{{ sccache_temp_dir.path }}/sccache"
         delete_archive: true
