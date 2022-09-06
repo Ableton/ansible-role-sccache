@@ -1,12 +1,12 @@
 ---
 - name: Ensure sccache configuration directory exists
-  win_file:
+  ansible.windows.win_file:
     path: "{{ sccache_config_directory }}"
     state: directory
     owner: "{{ sccache_user }}"
 
 - name: Create sccache configuration file
-  win_template:
+  ansible.windows.win_template:
     src: config.j2
     dest: "{{ sccache_config_file }}"
     owner: "{{ sccache_user }}"

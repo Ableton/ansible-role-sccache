@@ -1,5 +1,5 @@
 ---
 - name: Install sccache package from chocolatey
-  win_chocolatey:
+  chocolatey.chocolatey.win_chocolatey:
     name: sccache
     state: present

@@ -1,16 +1,16 @@
 ---
 - name: Check sccache version
-  win_command: "sccache --version"
+  ansible.windows.win_command: "sccache --version"
   changed_when: false
   failed_when: false
   register: sccache_version_cmd
 
 - name: Initialize should_install_from_binary fact
-  set_fact:
+  ansible.builtin.set_fact:
     should_install_from_binary: true
 
 - name: Set fact to determine if sccache installation is necessary
-  set_fact:
+  ansible.builtin.set_fact:
     should_install_from_binary: true
   when: >
     sccache_version_cmd.rc != 0 or
@@ -19,13 +19,13 @@
 - name: Install sccache from GitHub
   block:
     - name: Create temporary directory for downloads
-      win_tempfile:
+      ansible.windows.win_tempfile:
         state: directory
         prefix: sccache
       register: sccache_temp_dir
 
     - name: Fetch sccache binary
-      win_get_url:
+      ansible.windows.win_get_url:
         url: "{{ sccache_download_url }}/v{{ sccache_version.version }}\
           /sccache-v{{ sccache_version.version }}-{{ target_triplet }}.tar.gz"
         checksum: "{{ sccache_version.shas[ansible_os_family] }}"
@@ -35,32 +35,32 @@
     # This is needed to unzip .tar.gz in Windows, see the Ansible documentation for
     # win_unzip.
     - name: Install PSCX
-      win_psmodule:
+      community.windows.win_psmodule:
         allow_clobber: true
         name: Pscx
         state: present
 
     - name: Uncompress sccache tarball
-      win_unzip:
+      community.windows.win_unzip:
         src: "{{ sccache_temp_dir.path }}/sccache.tar.gz"
         dest: "{{ sccache_temp_dir.path }}"
         delete_archive: true
 
     # win_unzip only uncompresses the .gz, but it doesn't unpack the .tar automatically.
     - name: Unpack sccache tarball
-      win_unzip:
+      community.windows.win_unzip:
         src: "{{ sccache_temp_dir.path }}/sccache.tar"
         dest: "{{ sccache_temp_dir.path }}/sccache"
         delete_archive: true
 
     - name: Install sccache executable
-      win_shell: "Move-Item -Force \
+      ansible.windows.win_shell: "Move-Item -Force \
         -Path '{{ sccache_temp_dir.path }}\\sccache\\\
         sccache-v{{ sccache_version.version }}-{{ target_triplet }}\\sccache.exe' \
         '{{ sccache_install_prefix_windows }}'"
 
     - name: Allow all users to run sccache executable
-      win_acl:
+      ansible.windows.win_acl:
         path: "{{ sccache_install_prefix_windows }}\\sccache.exe"
         user: BUILTIN\Users
         rights: ReadAndExecute
