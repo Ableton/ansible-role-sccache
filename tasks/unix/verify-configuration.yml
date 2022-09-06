@@ -1,12 +1,12 @@
 ---
 - name: Set fact combining install prefix and package manager paths
-  set_fact:
+  ansible.builtin.set_fact:
     full_path: "{{ sccache_install_prefix_unix }}/bin:{{ ansible_pkg_mgr_path }}"
 
 # sccache won't load the new values if a server is already running in the background, so
 # we stop any running server before checking the new configuration.
 - name: Shut down running server if present
-  command: "sccache --stop-server"  # noqa no-changed-when
+  ansible.builtin.command: "sccache --stop-server"  # noqa no-changed-when
   environment:
     PATH: "{{ full_path }}"
   register: stop_server_result
@@ -19,7 +19,7 @@
     - '"couldn''t connect to server" not in stop_server_result.stderr'
 
 - name: Test configuration by getting stats
-  command: "sccache --show-stats"
+  ansible.builtin.command: "sccache --show-stats"
   environment:
     PATH: "{{ full_path }}"
   changed_when: false

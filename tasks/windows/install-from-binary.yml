@@ -6,11 +6,11 @@
   register: sccache_version_cmd
 
 - name: Initialize should_install_from_binary fact
-  set_fact:
+  ansible.builtin.set_fact:
     should_install_from_binary: true
 
 - name: Set fact to determine if sccache installation is necessary
-  set_fact:
+  ansible.builtin.set_fact:
     should_install_from_binary: true
   when: >
     sccache_version_cmd.rc != 0 or

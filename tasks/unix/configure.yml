@@ -1,7 +1,7 @@
 ---
 - name: Ensure sccache configuration directory exists
   become: true
-  file:
+  ansible.builtin.file:
     path: "{{ sccache_config_directory }}"
     state: directory
     owner: "{{ sccache_user }}"
@@ -9,7 +9,7 @@
 
 - name: Create sccache configuration file
   become: true
-  template:
+  ansible.builtin.template:
     src: config.j2
     dest: "{{ sccache_config_file }}"
     owner: "{{ sccache_user }}"
