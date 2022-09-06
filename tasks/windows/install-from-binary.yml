@@ -1,6 +1,6 @@
 ---
 - name: Check sccache version
-  win_command: "sccache --version"
+  ansible.windows.win_command: "sccache --version"
   changed_when: false
   failed_when: false
   register: sccache_version_cmd
@@ -19,13 +19,13 @@
 - name: Install sccache from GitHub
   block:
     - name: Create temporary directory for downloads
-      win_tempfile:
+      ansible.windows.win_tempfile:
         state: directory
         prefix: sccache
       register: sccache_temp_dir
 
     - name: Fetch sccache binary
-      win_get_url:
+      ansible.windows.win_get_url:
         url: "{{ sccache_download_url }}/v{{ sccache_version.version }}\
           /sccache-v{{ sccache_version.version }}-{{ target_triplet }}.tar.gz"
         checksum: "{{ sccache_version.shas[ansible_os_family] }}"
@@ -54,13 +54,13 @@
         delete_archive: true
 
     - name: Install sccache executable
-      win_shell: "Move-Item -Force \
+      ansible.windows.win_shell: "Move-Item -Force \
         -Path '{{ sccache_temp_dir.path }}\\sccache\\\
         sccache-v{{ sccache_version.version }}-{{ target_triplet }}\\sccache.exe' \
         '{{ sccache_install_prefix_windows }}'"
 
     - name: Allow all users to run sccache executable
-      win_acl:
+      ansible.windows.win_acl:
         path: "{{ sccache_install_prefix_windows }}\\sccache.exe"
         user: BUILTIN\Users
         rights: ReadAndExecute
