@@ -1,5 +1,5 @@
 ---
 - name: Install sccache package from homebrew
-  homebrew:
+  community.general.homebrew:
     name: sccache
     state: present
