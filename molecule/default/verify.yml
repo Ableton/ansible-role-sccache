@@ -1,0 +1,15 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Stat sccache binary file
+      ansible.builtin.stat:
+        path: "/usr/local/bin/sccache"
+      register: sccache_bin
+
+    - name: Assert that sccache was installed correctly
+      ansible.builtin.assert:
+        that:
+          - sccache_bin.stat.exists
+          - sccache_bin.stat.isreg
+          - sccache_bin.stat.mode == "0755"
