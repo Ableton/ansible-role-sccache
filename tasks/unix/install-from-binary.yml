@@ -17,6 +17,7 @@
     sccache_version.version not in sccache_version_cmd.stdout_lines[0]
 
 - name: Install sccache from GitHub
+  when: should_install_from_binary
   block:
     - name: Ensure sccache download and extraction directories exist
       become: true
@@ -72,4 +73,3 @@
         path: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}-\
           {{ target_triplet }}.tar.gz"
         state: absent
-  when: should_install_from_binary

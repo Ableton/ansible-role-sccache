@@ -1,6 +1,6 @@
 ---
 - name: Verify sccache configuration for Unix host
-  include_tasks: "unix/verify-configuration.yml"
+  ansible.builtin.include_tasks: "unix/verify-configuration.yml"
 
 - name: Verify sccache configuration for Windows host
-  include_tasks: "windows/verify-configuration.yml"
+  ansible.builtin.include_tasks: "windows/verify-configuration.yml"

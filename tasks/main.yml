@@ -25,23 +25,29 @@
   when: ansible_pkg_mgr == "macports"
 
 - name: Install sccache on Unix
+  when: ansible_os_family != "Windows"
   block:
-    - ansible.builtin.include_tasks: "unix/install-from-binary.yml"
+    - name: Include Unix-specific tasks to install from binary
+      ansible.builtin.include_tasks: "unix/install-from-binary.yml"
       when: sccache_install_from_binary
 
-    - ansible.builtin.include_tasks: "install-package-{{ ansible_pkg_mgr }}.yml"
+    - name: Include Unix-specific tasks to install via package manager
+      ansible.builtin.include_tasks: "install-package-{{ ansible_pkg_mgr }}.yml"
       when: not sccache_install_from_binary
 
-    - ansible.builtin.include_tasks: "unix/configure.yml"
-  when: ansible_os_family != "Windows"
+    - name: Include Unix-specific tasks to configure sccache
+      ansible.builtin.include_tasks: "unix/configure.yml"
 
 - name: Install sccache on Windows
+  when: ansible_os_family == "Windows"
   block:
-    - ansible.builtin.include_tasks: "windows/install-from-binary.yml"
+    - name: Include Windows-specific tasks to install from binary
+      ansible.builtin.include_tasks: "windows/install-from-binary.yml"
       when: sccache_install_from_binary
 
-    - ansible.builtin.include_tasks: "install-package-{{ ansible_pkg_mgr }}.yml"
+    - name: Include Windows-specific tasks to install via package manager
+      ansible.builtin.include_tasks: "install-package-{{ ansible_pkg_mgr }}.yml"
       when: not sccache_install_from_binary
 
-    - ansible.builtin.include_tasks: "windows/configure.yml"
-  when: ansible_os_family == "Windows"
+    - name: Include Windows-specific tasks to configure sccache
+      ansible.builtin.include_tasks: "windows/configure.yml"
