@@ -17,6 +17,7 @@
     sccache_version.version not in sccache_version_cmd.stdout_lines[0]
 
 - name: Install sccache from GitHub
+  when: should_install_from_binary
   block:
     - name: Create temporary directory for downloads
       ansible.windows.win_tempfile:
@@ -65,4 +66,3 @@
         user: BUILTIN\Users
         rights: ReadAndExecute
         type: allow
-  when: should_install_from_binary
