@@ -48,7 +48,7 @@ cryptography==38.0.3
     # via ansible-core
 distro==1.8.0
     # via selinux
-docker==6.0.0
+docker==6.0.1
     # via molecule-docker
 enrich==1.2.7
     # via molecule
@@ -90,7 +90,7 @@ pathspec==0.10.1
     # via
     #   black
     #   yamllint
-platformdirs==2.5.2
+platformdirs==2.5.3
     # via black
 pluggy==1.0.0
     # via molecule
@@ -100,7 +100,7 @@ pygments==2.13.0
     # via rich
 pyparsing==3.0.9
     # via packaging
-pyrsistent==0.19.1
+pyrsistent==0.19.2
     # via jsonschema
 python-dateutil==2.8.2
     # via arrow
@@ -146,7 +146,7 @@ urllib3==1.26.12
     #   requests
 wcmatch==8.4.1
     # via ansible-lint
-websocket-client==1.4.1
+websocket-client==1.4.2
     # via docker
 yamllint==1.28.0
     # via ansible-lint
