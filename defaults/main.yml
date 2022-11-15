@@ -28,8 +28,8 @@ sccache_user: "{{ ansible_user }}"
 # Version and SHA256 checksums of sccache to install. Only applies when
 # sccache_install_from_binary is true.
 sccache_version:
-  version: "0.3.0"
+  version: "0.3.1"
   shas:
-    Darwin: "61c16fd36e32cdc923b66e4f95cb367494702f60f6d90659af1af84c3efb11eb"
-    Debian: "e6cd8485f93d683a49c83796b9986f090901765aa4feb40d191b03ea770311d8"
-    Windows: "f25e927584d79d0d5ad489e04ef01b058dad47ef2c1633a13d4c69dfb83ba2be"
+    Darwin: "d8ade8d98cef392e6b256d184690e1d722f263c9f0bd83938fdd524e839c9e58"
+    Debian: "94ea33aac8dcb358753f8240cc87345963cf83cda7c6af0395dff31ffdc88df4"
+    Windows: "b8fc47e12dbc18a2a611dd5f037d0980f873c80a1adb26fa2f48cca0b0184adb"
