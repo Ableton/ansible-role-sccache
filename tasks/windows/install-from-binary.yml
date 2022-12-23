@@ -14,7 +14,7 @@
     should_install_from_binary: true
   when: >
     sccache_version_cmd.rc != 0 or
-    sccache_version.version not in sccache_version_cmd.stdout_lines[0]
+    sccache_version not in sccache_version_cmd.stdout_lines[0]
 
 - name: Install sccache from GitHub
   when: should_install_from_binary
@@ -27,9 +27,10 @@
 
     - name: Fetch sccache binary
       ansible.windows.win_get_url:
-        url: "{{ sccache_download_url }}/v{{ sccache_version.version }}\
-          /sccache-v{{ sccache_version.version }}-{{ target_triplet }}.tar.gz"
-        checksum: "{{ sccache_version.shas[ansible_os_family] }}"
+        url: "{{ sccache_download_url }}/v{{ sccache_version }}\
+          /sccache-v{{ sccache_version }}-{{ target_triplet }}.tar.gz"
+        checksum: "sha256:{{ sccache_download_url }}/v{{ sccache_version }}\
+          /sccache-v{{ sccache_version }}-{{ target_triplet }}.tar.gz.sha256"
         checksum_algorithm: sha256
         dest: "{{ sccache_temp_dir.path }}/sccache.tar.gz"
 
@@ -57,7 +58,7 @@
     - name: Install sccache executable
       ansible.windows.win_shell: "Move-Item -Force \
         -Path '{{ sccache_temp_dir.path }}\\sccache\\\
-        sccache-v{{ sccache_version.version }}-{{ target_triplet }}\\sccache.exe' \
+        sccache-v{{ sccache_version }}-{{ target_triplet }}\\sccache.exe' \
         '{{ sccache_install_prefix_windows }}'"
 
     - name: Allow all users to run sccache executable
