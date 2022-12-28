@@ -14,7 +14,7 @@
     should_install_from_binary: true
   when: >
     sccache_version_cmd.rc != 0 or
-    sccache_version.version not in sccache_version_cmd.stdout_lines[0]
+    sccache_version not in sccache_version_cmd.stdout_lines[0]
 
 - name: Install sccache from GitHub
   when: should_install_from_binary
@@ -22,24 +22,25 @@
     - name: Ensure sccache download and extraction directories exist
       become: true
       ansible.builtin.file:
-        path: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}"
+        path: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version }}"
         state: directory
         owner: "{{ sccache_user }}"
         mode: "0755"
 
     - name: Fetch sccache binary
       ansible.builtin.get_url:
-        url: "{{ sccache_download_url }}/v{{ sccache_version.version }}\
-          /sccache-v{{ sccache_version.version }}-{{ target_triplet }}.tar.gz"
-        checksum: "sha256:{{ sccache_version.shas[ansible_os_family] }}"
+        url: "{{ sccache_download_url }}/v{{ sccache_version }}\
+          /sccache-v{{ sccache_version }}-{{ target_triplet }}.tar.gz"
+        checksum: "sha256:{{ sccache_download_url }}/v{{ sccache_version }}\
+          /sccache-v{{ sccache_version }}-{{ target_triplet }}.tar.gz.sha256"
         dest: "{{ sccache_binary_download_dir }}"
         mode: "0644"
 
     - name: Uncompress sccache tarball
       ansible.builtin.unarchive:
-        src: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}-\
+        src: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version }}-\
           {{ target_triplet }}.tar.gz"
-        dest: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}"
+        dest: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version }}"
         mode: "0755"
         remote_src: true
       environment:
@@ -57,19 +58,19 @@
     - name: Install sccache
       become: true
       ansible.builtin.copy:
-        src: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}/\
-          sccache-v{{ sccache_version.version }}-{{ target_triplet }}/sccache"
+        src: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version }}/\
+          sccache-v{{ sccache_version }}-{{ target_triplet }}/sccache"
         dest: "{{ sccache_install_prefix_unix }}/bin/sccache"
         mode: a+rx
         remote_src: true
 
     - name: Cleanup download directory
       ansible.builtin.file:
-        path: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}"
+        path: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version }}"
         state: absent
 
     - name: Cleanup source tarball
       ansible.builtin.file:
-        path: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version.version }}-\
+        path: "{{ sccache_binary_download_dir }}/sccache-v{{ sccache_version }}-\
           {{ target_triplet }}.tar.gz"
         state: absent
