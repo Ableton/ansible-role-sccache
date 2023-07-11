@@ -4,4 +4,4 @@
   vars:
     ansible_user: molecule
   roles:
-    - ansible-role-sccache
+    - ableton.sccache
