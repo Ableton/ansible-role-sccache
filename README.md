@@ -1,5 +1,8 @@
-Ansible role ableton.sccache
-============================
+Ansible role ableton.sccache (ARCHIVED)
+=======================================
+
+**NOTE**: This repository has been archived, and although the role remains accessible on
+Ansible Galaxy, we are no longer maintaining it
 
 This role installs [sccache][sccache] on the given Ansible host and configures it for a
 given user.
